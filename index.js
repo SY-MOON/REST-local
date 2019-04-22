@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const bkfd2Password = require("pbkdf2-password");
 
 const hasher = bkfd2Password();
@@ -10,8 +10,7 @@ const app = express();
 
 app.use(cors());
 
-app.use(cookieParser('s3cr3tk3y'));
-
+// app.use(cookieParser('s3cr3tk3y'));
 
 app.use(session({
 	secret: '!@$Rfeqf34',
@@ -19,10 +18,8 @@ app.use(session({
 	saveUninitialized: true 
 }));
 
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
 
 app.listen(3000, () => {
 	console.log('3000 port');
@@ -34,7 +31,6 @@ app.get('/', (req, res) => {
 
 app.get('/name', (req, res) => res.json(cafeName));
 
-
 app.get('/coffeeList', (req, res) => res.json(coffeeList));
 
 app.get('/coffeeList/:id', (req, res) => {
@@ -44,23 +40,17 @@ app.get('/coffeeList/:id', (req, res) => {
 		return res.status(400).json({error: 'Incorrect id'});
 	}
 	
-	
 	let coffee = coffeeList.filter(coffee => coffee.id === id)[0];
 	if(!coffee) {
 		return res.status(404).json({error: 'Unknown coffee'});
 	}
-
 	return res.json(coffee);
 });
 
 
 app.post('/login', (req, res) => {
 
-
-
-//	let sess = req.session;
-
-//	console.log(sess);
+	sess = req.session;
 
 	let id = req.body.userId;
 	let pw = req.body.userPw;
@@ -69,16 +59,15 @@ app.post('/login', (req, res) => {
 		let user = users[i];
 
 		if(user.id === id) {
-			res.redirect('/index.html');
-//			return hasher({password: pw, salt: user.salt}, (err, pass, salt, hash) => {
-//				if(hash == user.password) {
-//					//req.session.save(()=>{
-//						res.redirect('/index.html');
-//					//})
-//				} else {				
-//					res.send('who are you?');
-//				}			
-//			}
+			return hasher({password: pw, salt: user.salt}, (err, pass, salt, hash) => {
+				if(hash == user.password) {
+					req.session.save(()=>{
+						res.send('/index.html');
+					})
+				} else {				
+					res.send('who are you?');
+				}			
+			}
 		}
 //		
 	}
