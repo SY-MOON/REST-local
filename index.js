@@ -59,20 +59,17 @@ app.post('/login', (req, res) => {
 		let user = users[i];
 
 		if(user.id === id) {
-			return hasher({password: pw, salt: user.salt}, (err, pass, salt, hash) => {
+			hasher({password: pw}, (err, pass, salt, hash) => {
 				if(hash == user.password) {
-					req.session.save(()=>{
-						res.send('/index.html');
+					sess.save(()=>{
+						return res.send('/index.html');
 					})
 				} else {				
-					res.send('who are you?');
+					return res.send('who are you?');
 				}			
-			}
+			});
 		}
-//		
 	}
-
-
 });
 
 
