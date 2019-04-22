@@ -119,7 +119,8 @@ let cafeName = 	{
 let users  = [
 	{
 		id: 'user',
-		password: '9WA88rq4Fnp4/4+XSJEeAxS8ft3MMRKdkDMMOEY4/cidk0/WOjA/hVOF9LddrjnpdbtRB+CImk5s4XBnEAzaE94SElq4t0OJnbS6IhwPHJInGav4q9wKCh6lo8I+JxMlDLO0Cj7nBrBgrKPeuEjVPMEXBg/Ovax98hIHne9I8d4=',
+//		password: '9WA88rq4Fnp4/4+XSJEeAxS8ft3MMRKdkDMMOEY4/cidk0/WOjA/hVOF9LddrjnpdbtRB+CImk5s4XBnEAzaE94SElq4t0OJnbS6IhwPHJInGav4q9wKCh6lo8I+JxMlDLO0Cj7nBrBgrKPeuEjVPMEXBg/Ovax98hIHne9I8d4=',
+		password: '0000',
 		salt: 'xjIdNWYvPpsrUzn5FUTsuQXDqGNI5gp3bKCI6BZA77qBLz8hGKMNg9FufyPj0Xg86306NKkNBhjxpg6fydpcGQ=='
 	},
 	{
