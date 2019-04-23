@@ -35,9 +35,13 @@ app.get('/', (req, res) => {
 
 app.get('/name', (req, res) => res.json(cafeName));
 
-app.get('/coffeeList', (req, res) => res.json(coffeeList));
+app.get('/coffeeList', (req, res) => {
+	console.log('get:coffeelist', req.session)``
+	res.json(coffeeList)
+});
 
 app.get('/coffeeList/:id', (req, res) => {
+	console.log('get:coffeelist:id', req.session)
 	const id = parseInt(req.params.id, 10);
 	if(!id) {
 
@@ -55,6 +59,7 @@ app.get('/coffeeList/:id', (req, res) => {
 app.post('/login', (req, res) => {
 
 	sess = req.session;
+	console.log('post:login', sess)
 
 	let id = req.body.userId;
 	let pw = req.body.userPw;
@@ -77,9 +82,11 @@ app.post('/login', (req, res) => {
 	}
 });
 
-app.get('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
 	sess = req.session;
 
+	console.log('post:logout', sess)
+	
 	if(sess.userId){
 		req.session.destory();  // 세션 삭제
 		res.clearCookie('s3cr3tk3y');
