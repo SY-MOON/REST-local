@@ -62,7 +62,7 @@ app.post('/login', (req, res) => {
 			hasher({password: pw}, (err, pass, salt, hash) => {
 				if(hash == user.password) {
 					sess.save(()=>{
-						return res.send('/index.html');
+						return res.redirect('/index.html');
 					})
 				} else {				
 					return res.send('who are you?');
