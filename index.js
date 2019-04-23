@@ -7,7 +7,7 @@ const bkfd2Password = require("pbkdf2-password");
 
 const hasher = bkfd2Password();
 const app = express();
-const sess = null;
+let sess = null;
 
 app.use(cors());
 
