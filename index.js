@@ -7,15 +7,18 @@ const bkfd2Password = require("pbkdf2-password");
 
 const hasher = bkfd2Password();
 const app = express();
+const sess = null;
 
 app.use(cors());
 
-// app.use(cookieParser('s3cr3tk3y'));
-
 app.use(session({
+	key: 's3cr3tk3y', //세션키
 	secret: '!@$Rfeqf34',
 	resave: false, //변경사항이 없어도 저장할 거니?
-	saveUninitialized: true //
+	saveUninitialized: true, //초기화되지않은 상태로 저장할거냐
+	cookie: {
+		maxAge: 1000 * 60 * 60 * 24
+	}
 }));
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -62,6 +65,7 @@ app.post('/login', (req, res) => {
 		if(user.id === id) {
 			hasher({ password: pw, salt: user.salt }, (err, pass, salt, hash) => {
 				if(hash === user.password) {
+					sess.userId = user.id;
 					console.log('login success');
 					return res.send('success');
 				} else {				
@@ -72,7 +76,16 @@ app.post('/login', (req, res) => {
 	}
 });
 
+app.get('/logout', (req, res) => {
+	sess = req.session;
 
+	if(sess.userId){
+		req.session.destory();  // 세션 삭제
+		res.clearCookie('s3cr3tk3y');
+	}else{
+		res.send('ok');
+	}
+});
 
 
 let coffeeList = [
