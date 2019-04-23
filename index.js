@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 app.get('/name', (req, res) => res.json(cafeName));
 
 app.get('/coffeeList', (req, res) => {
-	console.log('get:coffeelist', req.session)``
+	console.log('get:coffeelist', req.session);
 	res.json(coffeeList)
 });
 
@@ -86,7 +86,7 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
 	sess = req.session;
 
-	console.log('post:logout', sess)
+	console.log('post:logout', sess);
 
 	if(sess.userId){
 		req.session.destory();  // 세션 삭제
