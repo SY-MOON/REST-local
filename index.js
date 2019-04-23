@@ -59,11 +59,9 @@ app.post('/login', (req, res) => {
 		let user = users[i];
 
 		if(user.id === id) {
-			hasher({password: pw}, (err, pass, salt, hash) => {
-				if(hash == user.password) {
-					sess.save(()=>{
-						return res.send('/index.html');
-					})
+			hasher({ password: pw, salt: user.salt }, (err, pass, salt, hash) => {
+				if(hash === user.password) {
+					return console.log('login success');
 				} else {				
 					return res.send('who are you?');
 				}			
@@ -71,6 +69,8 @@ app.post('/login', (req, res) => {
 		}
 	}
 });
+
+
 
 
 let coffeeList = [
