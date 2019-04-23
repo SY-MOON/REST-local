@@ -18,7 +18,8 @@ app.use(session({
 	resave: false, //변경사항이 없어도 저장할 거니?
 	saveUninitialized: true, //초기화되지않은 상태로 저장할거냐
 	cookie: {
-		maxAge: 1000 * 60 * 60 * 24
+		maxAge: 1000 * 60 * 60 * 24,
+		httpOnly: false
 	}
 }));
 
@@ -86,7 +87,7 @@ app.post('/logout', (req, res) => {
 	sess = req.session;
 
 	console.log('post:logout', sess)
-	
+
 	if(sess.userId){
 		req.session.destory();  // 세션 삭제
 		res.clearCookie('s3cr3tk3y');
