@@ -2,15 +2,16 @@ const express = require('express');
 const cors = require('cors');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-// const cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
 const bkfd2Password = require("pbkdf2-password");
 
 const hasher = bkfd2Password();
 const app = express();
 let sess = null;
 
-app.use(cors());
 
+app.use(cors());
+app.use(cookieParser());
 app.use(session({
 	key: 's3cr3tk3y', //세션키
 	secret: '!@$Rfeqf34',
