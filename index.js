@@ -14,8 +14,8 @@ app.use(cors());
 
 app.use(session({
 	secret: '!@$Rfeqf34',
-	resave: false,
-	saveUninitialized: true 
+	resave: false, //변경사항이 없어도 저장할 거니?
+	saveUninitialized: true //
 }));
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -57,20 +57,22 @@ app.post('/login', (req, res) => {
 
 	for(i = 0; i < users.length; i++) {
 		let user = users[i];
+		
 
 		if(user.id === id) {
-			hasher({password: pw}, (err, pass, salt, hash) => {
-				if(hash == user.password) {
-					sess.save(()=>{
-						return res.redirect('/index.html');
-					})
+			hasher({ password: pw, salt: user.salt }, (err, pass, salt, hash) => {
+				if(hash === user.password) {
+					console.log('login success');
+					return res.send('success');
 				} else {				
-					return res.send('who are you?');
+					return res.status(401).send('who are you?');
 				}			
 			});
 		}
 	}
 });
+
+
 
 
 let coffeeList = [
@@ -105,8 +107,7 @@ let cafeName = 	{
 let users  = [
 	{
 		id: 'user',
-//		password: '9WA88rq4Fnp4/4+XSJEeAxS8ft3MMRKdkDMMOEY4/cidk0/WOjA/hVOF9LddrjnpdbtRB+CImk5s4XBnEAzaE94SElq4t0OJnbS6IhwPHJInGav4q9wKCh6lo8I+JxMlDLO0Cj7nBrBgrKPeuEjVPMEXBg/Ovax98hIHne9I8d4=',
-		password: '0000',
+		password: '9WA88rq4Fnp4/4+XSJEeAxS8ft3MMRKdkDMMOEY4/cidk0/WOjA/hVOF9LddrjnpdbtRB+CImk5s4XBnEAzaE94SElq4t0OJnbS6IhwPHJInGav4q9wKCh6lo8I+JxMlDLO0Cj7nBrBgrKPeuEjVPMEXBg/Ovax98hIHne9I8d4=',
 		salt: 'xjIdNWYvPpsrUzn5FUTsuQXDqGNI5gp3bKCI6BZA77qBLz8hGKMNg9FufyPj0Xg86306NKkNBhjxpg6fydpcGQ=='
 	},
 	{
