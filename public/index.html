@@ -1,0 +1,93 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Rest API TEST</title>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div id="app">
+		<h1>Hi, {{ user }}! Welcome to {{ storeName.name }}</h1>
+		<button id="" @click="getList">Show me the menu</button>
+		<ul>
+			<li v-for="coffee in coffeeList" >
+				<span>{{ coffee.name }}</span>
+				<span>{{ coffee.price }}</span>
+			</li>
+		</ul>
+
+		<input type="button" @click="logout" value="로그아웃">
+	</div>
+
+	<script>
+
+		var reqUrl = 'http://192.168.200.167:3000'
+		var token = localStorage.getItem('token')? localStorage.getItem('token') : '';
+		//var tokenOwner = localStorage.getItem('userName')? localStorage.getItem('userName') : '';
+
+		console.log(token);
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				storeName: { name: '' }, //undefined 오브젝트랑 상관없이 변수에 정의된 것이 없다 / 빈오브젝트를 굳이 쓰지 않는 것은 hip에 굳이 올라가지 않기 위해 null
+				coffeeList: [],
+				user: ''
+			},
+			created: function() {
+				axios.get(`${reqUrl}/name`, {
+					headers: {
+						'x-auth-token' : token
+					}
+				})
+					.then(result => {
+						this.storeName = result.data
+					})
+					.catch(err => {
+						console.log(err);
+						window.location.href = `${reqUrl}/login.html`;
+					})
+
+				axios.get(`${reqUrl}/userName`, {
+					headers: {
+						'x-auth-token' : token
+					}
+				})
+					.then(result => {
+						this.user = result.data.userName
+					})
+					.catch(err => {
+						console.log(err)
+					})
+			},
+			methods: {
+				getList: function() {
+					axios.get(`${reqUrl}/coffeeList`)
+						.then(result => {
+							this.coffeeList = result.data
+						})
+						.catch(err => {
+							console.log(err)
+							window.location.href = `${reqUrl}/login.html`;
+						})
+				},
+				logout: function() {
+					axios.post(`${reqUrl}/logout`, {
+						headers: {
+							'x-auth-token' : token
+						}
+					})
+						.then(result => {
+							localStorage.removeItem('token');
+							localStorage.removeItem('userName');
+							window.location.href = 'login.html';
+						})
+						.catch(err => {
+							console.log(err)
+						})
+				}
+			}
+		})
+	</script>
+</body>
+</html>
